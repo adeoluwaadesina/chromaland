@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chromaland Developers - Plot 610 Terraces
 
-## Getting Started
+A polished single-page marketing experience for Chromaland Developers, built with Next.js App Router, TypeScript, and Tailwind CSS. The site highlights Plot 610 Terraces in Daki Biyu, Abuja with immersive renders, smart-living features, an enquiry workflow, and mobile-first navigation.
 
-First, run the development server:
+## Tech Stack
+
+- Next.js 16 (App Router) + TypeScript
+- Tailwind CSS (custom theme + utility-first styling)
+- React Hook Form + Zod validation
+- Custom toast system, lightbox gallery, and accordions
+
+## Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Start local development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Run type-safe linting (ESLint + Tailwind rules)
+npm run lint
+
+# Generate a production build
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000` after running `npm run dev`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Asset Automation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Property renders, brand collateral, brochures, and social previews are generated through scripts under `scripts/`.
 
-## Learn More
+- `npm run extract:renders` - converts pages 6-11 of the architectural PDF into 1920px JPG renders.  
+  - Place the real PDF at `/mnt/data/PLOT 610 PROPOSED TERRACE OPTION 2.pdf` or copy it to `assets/PLOT 610 PROPOSED TERRACE OPTION 2.pdf`.  
+  - On Windows the script bundles Poppler binaries in `tools/` so no extra setup is required.  
+  - The command runs automatically via the `prepare` script after `npm install`.
+- `python scripts/create_brand_logo.py` - regenerates the gradient capsule logo and favicon.
+- `python scripts/create_brochure.py` - updates the single-page PDF brochure placeholder.
+- `python scripts/create_og_image.py` - refreshes the Open Graph image (`public/og.png`).
+- `python scripts/create_location_map.py` - recreates the stylised static map illustration.
 
-To learn more about Next.js, take a look at the following resources:
+Re-run the relevant script whenever design assets change.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Adding Another Property
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Duplicate the current page structure inside `app/(site)/` by creating a new route group, e.g. `app/(site)/plot-611/page.tsx`.
+2. Add the new property data to a dedicated module under `lib/` (follow `lib/data.ts` as a pattern).
+3. Generate renders with `npm run extract:renders`, pointing `CHROMALAND_PDF` to the new PDF.
+4. Update navigation (`lib/data.ts::NAV_ITEMS`) if you need to expose the new property via the global menu.
+5. Configure marketing assets (logo, brochure, OG image) for the new property in `public/`.
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The contact endpoint is currently stubbed and logs enquiries in development. Prepare email delivery by duplicating `env.example` to `.env.local` and supplying SMTP details:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+EMAIL_TO=hello@chromaland.com
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=api-key
+SMTP_PASSWORD=secret
+```
+
+## Testing & Quality
+
+- `npm run lint` - ESLint (flat config) with Tailwind-specific rules.
+- `npm run format` - Prettier with Tailwind class sorting.
+
+## Folder Structure Highlights
+
+- `app/(site)/` - marketing layout, hero, sections, and supporting pages (`/privacy`, `/terms`).
+- `app/api/contact/` - POST endpoint validating enquiries via Zod (email sending stubbed).
+- `components/` - shared UI primitives (buttons, layout, gallery, accordion, toasts).
+- `lib/` - typed data sources and utilities.
+- `public/` - brand assets, renders, icons, social images, and brochure.
+- `scripts/` - repeatable asset-generation helpers (Python + Node).
+
+## Accessibility & Performance Notes
+
+- Semantic sectioning with `scroll-mt` offsets for anchored navigation.
+- Mobile slide-in menu with focus handling and body scroll locking.
+- Gallery lightbox supports keyboard arrows, Escape, and swipe gestures.
+- Next/Image used across the site with responsive sizing and blur placeholders.
+- Toast provider surfaces enquiry feedback with ARIA-friendly alerts.
+
+Enjoy building Chromaland's next property drop!
