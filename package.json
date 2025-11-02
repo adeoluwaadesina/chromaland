@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
-    "extract:renders": "node scripts/extract-renders.mjs",
-    "prepare": "npm run extract:renders"
+    "extract:renders": "node scripts/extract-renders.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

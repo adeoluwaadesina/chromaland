@@ -34,7 +34,7 @@ Property renders, brand collateral, brochures, and social previews are generated
 - `npm run extract:renders` - converts pages 6-11 of the architectural PDF into 1920px JPG renders.  
   - Place the real PDF at `/mnt/data/PLOT 610 PROPOSED TERRACE OPTION 2.pdf` or copy it to `assets/PLOT 610 PROPOSED TERRACE OPTION 2.pdf`.  
   - On Windows the script bundles Poppler binaries in `tools/` so no extra setup is required.  
-  - The command runs automatically via the `prepare` script after `npm install`.
+    - This command is optional for CI; run it manually when you need to refresh the renders.
 - `python scripts/create_brand_logo.py` - regenerates the gradient capsule logo and favicon.
 - `python scripts/create_brochure.py` - updates the single-page PDF brochure placeholder.
 - `python scripts/create_og_image.py` - refreshes the Open Graph image (`public/og.png`).
